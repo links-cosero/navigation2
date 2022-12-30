@@ -302,6 +302,12 @@ public:
    */
   double getRobotRadius() {return robot_radius_;}
 
+  /**
+   * @brief  Get new obstacle array message, it is simply uploaded dynamics obstacles information.
+   */
+  void tracksCallback(const nav2_dynamic_msgs::msg::ObstacleArray::SharedPtr obstacle_msg);
+
+
 protected:
   // Publishers and subscribers
   rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::PolygonStamped>::SharedPtr
@@ -310,6 +316,8 @@ protected:
 
   rclcpp::Subscription<geometry_msgs::msg::Polygon>::SharedPtr footprint_sub_;
   rclcpp::Subscription<rcl_interfaces::msg::ParameterEvent>::SharedPtr parameter_sub_;
+  rclcpp::Subscription<nav2_dynamic_msgs::msg::ObstacleArray>::SharedPtr tracks_sub_;
+
 
   // Dedicated callback group and executor for tf timer_interface and message fillter
   rclcpp::CallbackGroup::SharedPtr callback_group_;
@@ -363,6 +371,7 @@ protected:
   bool rolling_window_{false};     ///< Whether to use a rolling window version of the costmap
   bool track_unknown_space_{false};
   double transform_tolerance_{0};  ///< The timeout before transform errors
+  bool dynamic_obstacles_plugin_; // check if dynamic obstacles is enabled or not 
 
   // Derived parameters
   bool use_radius_{false};
